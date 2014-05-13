@@ -1,0 +1,28 @@
+{
+  "name": "thrush",
+  "version": "0.0.0",
+  "description": "Some useful additions to bluebird",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.ngmoco.com:Supernova/thrush.git"
+  },
+  "keywords": [
+    "bluebird",
+    "promise",
+    "promises",
+    "addon",
+    "extension",
+    "async"
+  ],
+  "author": "DeNA",
+  "devDependencies": {
+    "mocha": "^1.18.2"
+  },
+  "dependencies": {
+    "bluebird": "^1.2.4"
+  }
+}
