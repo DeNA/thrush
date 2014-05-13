@@ -415,4 +415,22 @@ describe('Promise', function(){
             assert(done);
         });
     });
+
+    describe('mapAll', function(){
+        it('should execute the functions returning promises', function(done){
+            function p() { return Promise.resolve(1) }
+            Promise.mapAll([p,p,p,p]).then(function(result){
+                assert.deepEqual(result, [1,1,1,1]);
+            }).done(done);
+        });
+
+        it('should reject if any of the functions do not return a promise', function(done) {
+            function p() { return Promise.resolve(1) }
+            function q() { return 1; }
+            Promise.mapAll([p,p,q,p]).catch(function(e){
+                assert(e.message.match(/did not return a promise/));
+                done();
+            });
+        });
+    });
 });
