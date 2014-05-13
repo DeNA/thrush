@@ -1,0 +1,33 @@
+# ignore node.js modules
+node_modules
+.node_modules
+
+# ignore Apple DS Store
+*.DS_Store
+Thumbs.db
+
+# ignore IntelliJ project files
+*.idea
+*.iml
+\#*\#
+
+# ignore log files
+/logs
+*.log
+
+# ignore swap files
+*.swp
+
+# ignore tags file
+tags
+
+# emacs turds
+*~
+
+# pid files
+*.pid
+
+*.pyc
+/run
+doc
+coverage
