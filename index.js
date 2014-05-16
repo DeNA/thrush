@@ -167,17 +167,19 @@ Promise.prototype.spreadNodeify = function Promise_spreadNodeify(cb) {
 };
 
 /**
+ * Similar to `async.parallel`.
+ *
  * Shortcut to `Promise.all(arr.map(function(x) { return x(); }));`
  *
  * @param {array} arr Array of functions that return promises
  * @return {Promise}
  */
-Promise.mapAll = function Promise$mapAll(arr) {
+Promise.invokeAll = function Promise$mapAll(arr) {
     var i = arr.length, mapped = new Array(i), x;
     while (i--) {
         x = arr[i]();
         if (!x || typeof x.then !== 'function') {
-            return Promise.reject(new Error('[Promise_mapAll] arr['+i+'] did not return a promise'));
+            return Promise.reject(new Error('[Promise_invokeAll] arr['+i+'] did not return a promise'));
         }
         mapped[i] = x;
     }
