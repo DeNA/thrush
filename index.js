@@ -43,7 +43,15 @@ function defaultSeriesIterator(elem, x) {
  * object (`elem`) and previously resolved object(`x`).
  * @return {Promise}
  */
-Promise.series = function Promise$series(arr, iterator){
+Promise.series = Promise$series;
+
+Promise.prototype.series = function(iterator){
+    return this.then(function(arr){
+        return Promise$series(arr, iterator);
+    });
+}
+
+function Promise$series(arr, iterator){
     iterator = iterator || defaultSeriesIterator;
     var p = Promise.resolve(), curr;
     function addIteration(curr) {
@@ -53,7 +61,7 @@ Promise.series = function Promise$series(arr, iterator){
         addIteration(arr[i]);
     }
     return p;
-};
+}
 
 /**
  * Similar to `async.whilst`.
