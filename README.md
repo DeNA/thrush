@@ -3,7 +3,7 @@
 
 > ![American Robin](http://upload.wikimedia.org/wikipedia/commons/6/6a/American_Robin_0025.jpg)
 >
-> A [**Thrush**](http://en.wikipedia.org/wiki/Thrush_(bird)) is any member of the *Turdidae* family, which includes robins, bluebird, blackbirds and other small birds.
+> A [**Thrush**](http://en.wikipedia.org/wiki/Thrush_(bird) is any member of the *Turdidae* family, which includes robins, bluebird, blackbirds and other small birds.
 
 **Thrush** is a set of addon functions for [Bluebird](https://github.com/petkaantonov/bluebird). The intention is to make it easier for people coming from libraries like [async.js](https://github.com/caolan/async). Thrush includes Bluebird, so all you need to do is something like this:
 
