@@ -51,7 +51,13 @@ Each array element is assumed to be a function with the same signature as an ite
 
 ##### `.series([Function iterator])` -> `Promise`
 
- This is the same as `Promise.series`, but operates on an array resolved by promise this is being called on.
+This is the same as [`Promise.series`](#promiseseriesarray-arr-function-iterator---promise), but operates on an array resolved by promise this is being called on.
+
+----------
+
+##### `Promise.invokeAll(Array arr)` -> `Promise`
+
+Similar to [`async.parallel`](https://github.com/caolan/async#parallel). Shortcut to `Promise.all(arr.map(function(x) { return x(); }));`
 
 ----------
 
