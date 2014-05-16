@@ -1,7 +1,7 @@
 
 # Thrush
 
-> ![American Robin](http://upload.wikimedia.org/wikipedia/commons/6/6a/American_Robin_0025.jpg)
+> ![Swainson's Thrushes](http://www.allaboutbirds.org/guide/PHOTO/LARGE/swain.jpg)
 >
 > A [**Thrush**](http://en.wikipedia.org/wiki/Thrush_(bird) is any member of the *Turdidae* family, which includes robins, bluebird, blackbirds and other small birds.
 
@@ -46,6 +46,12 @@ Pass in an array of objects to iterate over, and an iterator function. The itera
 <u> Using without an iterator:</u>
 
 Each array element is assumed to be a function with the same signature as an iterator function would in the previous case. If the array element is not a function, the value is simply passed along to the next array element (which is hopefully a function) as the resolved value.
+
+----------
+
+##### `.series([Function iterator])` -> `Promise`
+
+ This is the same as `Promise.series`, but operates on an array resolved by promise this is being called on.
 
 ----------
 
