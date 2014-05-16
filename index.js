@@ -45,6 +45,15 @@ function defaultSeriesIterator(elem, x) {
  */
 Promise.series = Promise$series;
 
+/**
+ * This is the same as `Promise.series`, but operates on an array resolved by
+ * promise this is being called on.
+ *
+ * @memberof! Promise.prototype
+ * @param {iterator} iterator optional iterator function. Takes in current
+ * object (`elem`) and previously resolved object(`x`).
+ * @return {Promise}
+ */
 Promise.prototype.series = function(iterator){
     return this.then(function(arr){
         return Promise$series(arr, iterator);

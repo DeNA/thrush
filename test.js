@@ -11,7 +11,7 @@ describe('Promise', function(){
         assert(!require('bluebird/js/main/promise')().series);
     });
 
-    describe('#whilst', function(){
+    describe('.whilst', function(){
         it('should operate correctly', function(done){
             var result = [], counter = 0;
             Promise.whilst(function(){
@@ -60,7 +60,7 @@ describe('Promise', function(){
         });
     });
 
-    describe('#series with iterator', function(){
+    describe('.series with iterator', function(){
         it('should operate correctly', function(done){
             var result = [], orig = [0,1,2,3,4];
             Promise.series(orig, function(elem){
@@ -132,7 +132,7 @@ describe('Promise', function(){
         });
     });
 
-    describe('#series without iterator', function(){
+    describe('.series without iterator', function(){
         it('should operate correctly', function(done){
             var result = [], orig = [0,1,2,3,4];
             Promise.series(orig.map(function(elem){
@@ -219,6 +219,165 @@ describe('Promise', function(){
 
     });
 
+    describe('#series with iterator', function(){
+        it('should operate correctly', function(done){
+            var result = [], orig = [0,1,2,3,4];
+            Promise.resolve(orig).series(function(elem){
+                result.push(elem);
+            }).then(function(){
+                assert.deepEqual(result, orig);
+                done();
+            }).catch(done);
+        });
+
+        it('should operate correctly returning a promise', function(done){
+            var result = [], orig = [0,1,2,3,4];
+            Promise.resolve(orig).series(function(elem){
+                return Promise.resolve().then(function(){
+                    result.push(elem);
+                });
+            }).then(function(){
+                assert.deepEqual(result, orig);
+                done();
+            }).catch(done);
+        });
+
+        describe('should not execute after the first error', function(){
+            function test(done){
+                var result = [], orig = [0,1,2,3,4];
+                var limit = 1+Math.floor(Math.random()*3);
+                Promise.resolve(orig).series(function(elem){
+                    if (elem === limit) {
+                        throw new Error('BAAAAAD');
+                    }
+                    result.push(elem);
+                }).catch(function(err){
+                    assert.equal(err.message, 'BAAAAAD');
+                    assert.equal(result.length, limit);
+                    for (var i = 0; i < limit; i++) {
+                        assert.equal(result[i], i);
+                    }
+                    done();
+                });
+            }
+            for (var i = 1; i <= 5; i++) { // do it several times since we're randomizing the error element
+                it('trial '+i, test);
+            }
+        });
+
+        describe('should not execute after the first error returning promises', function(){
+            function test(done){
+                var result = [], orig = [0,1,2,3,4];
+                var limit = 1+Math.floor(Math.random()*3);
+                Promise.resolve(orig).series(function(elem){
+                    return Promise.resolve().then(function(){
+                        if (elem === limit) {
+                            throw new Error('BAAAAAD');
+                        }
+                        result.push(elem);
+                    });
+                }).catch(function(err){
+                    assert.equal(err.message, 'BAAAAAD');
+                    assert.equal(result.length, limit);
+                    for (var i = 0; i < limit; i++) {
+                        assert.equal(result[i], i);
+                    }
+                    done();
+                });
+            }
+            for (var i = 1; i <= 5; i++) { // do it several times since we're randomizing the error element
+                it('trial '+i, test);
+            }
+        });
+    });
+
+    describe('#series without iterator', function(){
+        it('should operate correctly', function(done){
+            var result = [], orig = [0,1,2,3,4];
+            Promise.resolve(orig.map(function(elem){
+                if (elem === 0) {
+                    return elem; // testing non-func case
+                }
+                return function(x){
+                    if (elem === 1) {
+                        assert.equal(x, 0); // make sure promise values get passed along
+                    }
+                    result.push(elem);
+                };
+            })).series().then(function(){
+                assert.deepEqual(result, [1,2,3,4]); // no result.push() for 0
+                done();
+            }).catch(done);
+        });
+
+        it('should operate correctly returning a promise', function(done){
+            var result = [], orig = [0,1,2,3,4];
+            Promise.resolve(orig.map(function(elem){
+                return function(){
+                    return Promise.resolve().then(function(){
+                        result.push(elem);
+                    });
+                };
+            })).series().then(function(){
+                assert.deepEqual(result, orig);
+                done();
+            }).catch(done);
+        });
+
+        describe('should not execute after the first error', function(){
+            function test(done){
+                var result = [], orig = [0,1,2,3,4];
+                var limit = 1+Math.floor(Math.random()*3);
+                Promise.resolve(orig.map(function(elem){
+                    return function(){
+                        if (elem === limit) {
+                            throw new Error('BAAAAAD');
+                        }
+                        result.push(elem);
+                    };
+                })).series().catch(function(err){
+                    assert.equal(err.message, 'BAAAAAD');
+                    assert.equal(result.length, limit);
+                    for (var i = 0; i < limit; i++) {
+                        assert.equal(result[i], i);
+                    }
+                    done();
+                });
+            }
+            for (var i = 1; i <= 5; i++) { // do it several times since we're randomizing the error element
+                it('trial '+i, test);
+            }
+        });
+
+        describe('should not execute after the first error returning promises', function(){
+            function test(done){
+                var result = [], orig = [0,1,2,3,4];
+                var limit = 1+Math.floor(Math.random()*3);
+                Promise.resolve(orig.map(function(elem){
+                    return function(){
+                        return Promise.resolve().then(function(){
+                            if (elem === limit) {
+                                throw new Error('BAAAAAD');
+                            }
+                            result.push(elem);
+                        });
+                    };
+                })).series().catch(function(err){
+                    assert.equal(err.message, 'BAAAAAD');
+                    assert.equal(result.length, limit);
+                    for (var i = 0; i < limit; i++) {
+                        assert.equal(result[i], i);
+                    }
+                    done();
+                });
+            }
+            for (var i = 0; i < 5; i++) { // do it several times since we're randomizing the error element
+                it('trial '+i, test);
+            }
+        });
+
+    });
+
     // we're asserting this behavior since we require it, and it used to be unsupported
     describe('#nodeify', function() {
         it('receives a result', function(done) {
@@ -258,7 +417,7 @@ describe('Promise', function(){
         });
     });
 
-    describe('#safelyPromisify', function(){
+    describe('.safelyPromisify', function(){
         var callbackish, promiseish, nodeified, asyncThrow, error;
         before(function(){
             error = new Error('safelyPromisify error');
@@ -416,7 +575,7 @@ describe('Promise', function(){
         });
     });
 
-    describe('invokeAll', function(){
+    describe('.invokeAll', function(){
         it('should execute the functions returning promises', function(done){
             function p() { return Promise.resolve(1) }
             Promise.invokeAll([p,p,p,p]).then(function(result){
