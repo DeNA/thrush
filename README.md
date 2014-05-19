@@ -5,7 +5,11 @@
 >
 > A [**Thrush**](http://en.wikipedia.org/wiki/Thrush_(bird) is any member of the *Turdidae* family, which includes robins, bluebird, blackbirds and other small birds.
 
-**Thrush** is a set of addon functions for [Bluebird](https://github.com/petkaantonov/bluebird). The intention is to make it easier for people coming from libraries like [async.js](https://github.com/caolan/async). Thrush includes Bluebird, so all you need to do is something like this:
+**Thrush** is a set of addon functions for [Bluebird](https://github.com/petkaantonov/bluebird). The intention is to make it easier for people coming from libraries like [async.js](https://github.com/caolan/async).
+
+Thrush is intended for use with Node.js v0.10.26+. Usage with earlier versions of Node.js, or in other JavaScript environments, is not yet supported.
+
+Thrush includes Bluebird, so all you need to do is something like this:
 
 ```javascript
 var Promise = require('thrush');
