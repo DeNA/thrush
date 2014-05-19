@@ -7,8 +7,8 @@ describe('Promise', function(){
     it('should not pollute bluebird', function(){
         assert(Promise.whilst);
         assert(Promise.series);
-        assert(!require('bluebird/js/main/promise')().whilst);
-        assert(!require('bluebird/js/main/promise')().series);
+        assert(!require('bluebird').whilst);
+        assert(!require('bluebird').series);
     });
 
     describe('.whilst', function(){
