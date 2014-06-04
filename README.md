@@ -3,9 +3,9 @@
 
 > ![Swainson's Thrushes](http://www.allaboutbirds.org/guide/PHOTO/LARGE/swain.jpg)
 >
-> A [**Thrush**](http://en.wikipedia.org/wiki/Thrush_(bird) is any member of the *Turdidae* family, which includes robins, bluebird, blackbirds and other small birds.
+> A [**Thrush**](http://en.wikipedia.org/wiki/Thrush_%28bird%29) is any member of the *Turdidae* family, which includes robins, bluebirds, blackbirds and other small birds.
 
-**Thrush** is a set of addon functions for [Bluebird](https://github.com/petkaantonov/bluebird). The intention is to make it easier for people coming from libraries like [async.js](https://github.com/caolan/async).
+**Thrush** is a set of addon functions for [Bluebird](https://github.com/petkaantonov/bluebird). The intention is to make it easier for people coming from libraries like [async.js](https://github.com/caolan/async) to convert their code to use Promises. 
 
 Thrush is intended for use with Node.js v0.10.26+. Usage with earlier versions of Node.js, or in other JavaScript environments, is not yet supported.
 
