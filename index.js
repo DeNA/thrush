@@ -191,7 +191,7 @@ Promise.prototype.spreadNodeify = function Promise_spreadNodeify(cb) {
  * @param {array} arr Array of functions that return promises
  * @return {Promise}
  */
-Promise.invokeAll = function Promise$mapAll(arr) {
+Promise.invokeAll = function Promise$invokeAll(arr) {
     var i = arr.length, mapped = new Array(i), x;
     while (i--) {
         x = arr[i]();
