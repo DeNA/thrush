@@ -537,16 +537,6 @@ describe('Promise', function(){
                 done();
             });
         });
-        it('should call back with TypeError if promise does not resolve array', function(done){
-            Promise.resolve('hello').spreadNodeify(function(err){
-                try {
-                    assert.equal(arguments.length, 1);
-                    assert(err instanceof TypeError);
-                    assert.equal(err.message, '[Promise#spreadNodeify] promise does not resolve an array');
-                } catch(e) { return done(e); }
-                done();
-            });
-        });
         it('should pass rejections to the callback', function(done){
             var error = new Error('bad');
             Promise.reject(error).spreadNodeify(function(err){
@@ -561,17 +551,6 @@ describe('Promise', function(){
             var p = Promise.resolve([1,2,3,'1','b','c']);
             var q = p.spreadNodeify();
             assert.strictEqual(p, q);
-        });
-        it('should throw TypeError if callback is not a function', function(){
-            var done;
-            try {
-                Promise.resolve([1,2,3,'1','b','c']).spreadNodeify('hello');
-            } catch(e) {
-                assert(e instanceof TypeError);
-                assert.equal(e.message, '[Promise#spreadNodeify] callback is not a function');
-                done = true;
-            }
-            assert(done);
         });
     });
 

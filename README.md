@@ -73,31 +73,6 @@ Similar to [`async.whilst`](https://github.com/caolan/async#whilst).
 
 ----------
 
-##### `.spreadNodefiy([Function cb])` -> `Promise`
-
-Similar to [`nodeify`](https://github.com/petkaantonov/bluebird/blob/master/API.md#nodeifyfunction-callback---promise), except it works with arrays. The idea here is to support nodeifying promises that resolve arrays, in a manner similar to [`spread`](https://github.com/petkaantonov/bluebird/blob/master/API.md#spreadfunction-fulfilledhandler--function-rejectedhandler----promise).
-
-If the callback is missing, this will simply return the promise.
-
-If the callback is not a function, this will throw a TypeError.
-
-If the promise does not resolve an array, a TypeError will be resolved (or passed to the callback if available).
-
-Example:
-
-```javascript
-// will return promise if no cb, or call cb if it's there.
-Promise.resolve([1,2,3]).spreadNodeify(function(err, one, two, three){
-    if (err) return cb(err);
-    assert.equal(one, 1);
-    assert.equal(two, 2);
-    assert.equal(three, 3);
-    cb();
-});
-```
-
-----------
-
 
 ## LICENSE
 

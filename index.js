@@ -141,46 +141,21 @@ Promise.safelyPromisify = function Promise$safelyPromisify(func, thisObj, inDoma
 };
 
 /**
- * Similar to `nodeify`, except it works with arrays. The idea here is to support
- * nodeifying promises that resolve arrays, in a manner similar to `spread`.
+ * Actually just a passthrough to `Promise.prototype.nodeify()`.
  *
- * If the callback is missing, this will simply return the promise.
+ * It used to add some functionality, but that functionality is now part of
+ * nodeify, so this is no longer needed.
  *
- * If the callback is not a function, this will throw a TypeError.
- *
- * If the promise does not resolve an array, a TypeError will be resolved (or
- * passed to the callback if available).
- *
- * @example
- * function arrayThing(cb) {
- *     // will return promise if no cb, or call cb if it's there.
- *     Promise.resolve([1,2,3]).spreadNodeify(function(err, one, two, three){
- *         if (err) return cb(err);
- *         assert.equal(one, 1);
- *         assert.equal(two, 2);
- *         assert.equal(three, 3);
- *         cb();
- *     });
- * }
+ * @deprecated
  * @memberof! Promise.prototype
  * @param {function} cb Callback (can be falsy)
  * @return {Promise} undefined if a callback is provided
  */
 Promise.prototype.spreadNodeify = function Promise_spreadNodeify(cb) {
-    if (!cb) { return this; }
-
-    if (cb && typeof cb !== 'function') {
-        throw new TypeError('[Promise#spreadNodeify] callback is not a function');
-    }
-
-    this.then(function (arr) {
-        if (!Array.isArray(arr)) {
-            throw new TypeError('[Promise#spreadNodeify] promise does not resolve an array');
-        }
-
-        arr.unshift(null);
-        return arr;
-    }).spread(cb).catch(cb);
+    return require('util').deprecate(
+        this.nodeify,
+        'Promise#spreadNodeify is deprecated. Use Promise#nodeify instead.'
+    ).call(this, cb, {spread: true});
 };
 
 /**
