@@ -526,6 +526,21 @@ describe('Promise', function(){
                 });
             });
         });
+        it('should exit domain only after promise chain has unravelled', function(done){
+            assert(!process.domain);
+            var ran = false;
+            Promise.safelyPromisify(function(){
+                return Promise.resolve().then(function(){
+                    assert(process.domain);
+                    ran = true;
+                });
+            }, null, true)();
+            setImmediate(function(){
+                assert(ran);
+                assert(!process.domain);
+                done();
+            });
+        });
     });
 
     describe('#spreadNodeify', function() {
