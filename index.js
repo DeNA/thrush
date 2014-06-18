@@ -12,7 +12,7 @@
 var Promise = require('bluebird/js/main/promise')();
 
 /** @private */
-function defaultSeriesIterator(x, elem) {
+function defaultSeriesIterator(elem, x) {
     return typeof elem === 'function' ? elem(x) : Promise.resolve(elem);
 }
 
@@ -61,9 +61,15 @@ Promise.prototype.series = function(iterator){
 }
 
 function Promise$series(arr, iterator){
-    return Promise.reduce(arr, iterator ? function(total, current){
-        return iterator(current, total);
-    } : defaultSeriesIterator, Promise.resolve());
+    iterator = iterator || defaultSeriesIterator;
+    var p = Promise.resolve(), curr;
+    function addIteration(curr) {
+        p = p.then(function(x){ return iterator(curr, x); });
+    }
+    for (var i = 0, len = arr.length; i < len; i++) {
+        addIteration(arr[i]);
+    }
+    return p;
 }
 
 /**
