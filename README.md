@@ -35,6 +35,12 @@ If you pass a synchronous function in, it won't work. If your function returns a
 
 If you pass a 3rd parameter in and it is truthy, the func will be wrapped in a domain, so that any errors thrown deep in the callback chain will be caught and rejected. This is not recommended in general cases, since it's a burden on performance.
 
+`safelyPromisify` is actually useable as the promisifier function for `promisifyAll` so you can do something like this:
+
+```javascript
+Promise.promisifyAll(myModule, {promisifier: Promise.safeltPromisify});
+```
+
 ----------
  
 ##### `Promise.series(Array arr, [Function iterator])` -> `Promise`
