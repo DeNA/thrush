@@ -12,22 +12,21 @@ describe('Promise', function(){
     });
 
     describe('.whilst', function(){
-        it('should operate correctly', function(done){
+        it('should operate correctly', function(){
             var result = [], counter = 0;
-            Promise.whilst(function(){
+            return Promise.whilst(function(){
                 return result.length < 7;
             }, function(){
                 result.push(counter++);
             }).then(function(){
                 assert.equal(counter, 7);
                 assert.deepEqual(result, [0,1,2,3,4,5,6]);
-                done();
             });
         });
 
-        it('should operate correctly with action returning a promise', function(done){
+        it('should operate correctly with action returning a promise', function(){
             var result = [], counter = 0;
-            Promise.whilst(function(){
+            return Promise.whilst(function(){
                 return result.length < 7;
             }, function(){
                 return Promise.method(function(){
@@ -36,13 +35,12 @@ describe('Promise', function(){
             }).then(function(){
                 assert.equal(counter, 7);
                 assert.deepEqual(result, [0,1,2,3,4,5,6]);
-                done();
             });
         });
 
-        it('should stop on error', function(done){
+        it('should stop on error', function(){
             var result = [], counter = 0;
-            Promise.whilst(function(){
+            return Promise.whilst(function(){
                 return true;
             }, function(){
                 return Promise.method(function(){
@@ -55,39 +53,36 @@ describe('Promise', function(){
                 assert.equal(e.message, 'BAAD');
                 assert.equal(counter, 7);
                 assert.deepEqual(result, [0,1,2,3,4,5,6]);
-                done();
             });
         });
     });
 
     describe('.series with iterator', function(){
-        it('should operate correctly', function(done){
+        it('should operate correctly', function(){
             var result = [], orig = [0,1,2,3,4];
-            Promise.series(orig, function(elem){
+            return Promise.series(orig, function(elem){
                 result.push(elem);
             }).then(function(){
                 assert.deepEqual(result, orig);
-                done();
-            }).catch(done);
+            })
         });
 
-        it('should operate correctly returning a promise', function(done){
+        it('should operate correctly returning a promise', function(){
             var result = [], orig = [0,1,2,3,4];
-            Promise.series(orig, function(elem){
+            return Promise.series(orig, function(elem){
                 return Promise.resolve().then(function(){
                     result.push(elem);
                 });
             }).then(function(){
                 assert.deepEqual(result, orig);
-                done();
-            }).catch(done);
+            });
         });
 
         describe('should not execute after the first error', function(){
-            function test(done){
+            function test(){
                 var result = [], orig = [0,1,2,3,4];
                 var limit = 1+Math.floor(Math.random()*3);
-                Promise.series(orig, function(elem){
+                return Promise.series(orig, function(elem){
                     if (elem === limit) {
                         throw new Error('BAAAAAD');
                     }
@@ -98,7 +93,6 @@ describe('Promise', function(){
                     for (var i = 0; i < limit; i++) {
                         assert.equal(result[i], i);
                     }
-                    done();
                 });
             }
             for (var i = 1; i <= 5; i++) { // do it several times since we're randomizing the error element
@@ -107,10 +101,10 @@ describe('Promise', function(){
         });
 
         describe('should not execute after the first error returning promises', function(){
-            function test(done){
+            function test(){
                 var result = [], orig = [0,1,2,3,4];
                 var limit = 1+Math.floor(Math.random()*3);
-                Promise.series(orig, function(elem){
+                return Promise.series(orig, function(elem){
                     return Promise.resolve().then(function(){
                         if (elem === limit) {
                             throw new Error('BAAAAAD');
@@ -123,7 +117,6 @@ describe('Promise', function(){
                     for (var i = 0; i < limit; i++) {
                         assert.equal(result[i], i);
                     }
-                    done();
                 });
             }
             for (var i = 1; i <= 5; i++) { // do it several times since we're randomizing the error element
@@ -133,9 +126,9 @@ describe('Promise', function(){
     });
 
     describe('.series without iterator', function(){
-        it('should operate correctly', function(done){
+        it('should operate correctly', function(){
             var result = [], orig = [0,1,2,3,4];
-            Promise.series(orig.map(function(elem){
+            return Promise.series(orig.map(function(elem){
                 if (elem === 0) {
                     return elem; // testing non-func case
                 }
@@ -147,13 +140,12 @@ describe('Promise', function(){
                 };
             })).then(function(){
                 assert.deepEqual(result, [1,2,3,4]); // no result.push() for 0
-                done();
-            }).catch(done);
+            });
         });
 
-        it('should operate correctly returning a promise', function(done){
+        it('should operate correctly returning a promise', function(){
             var result = [], orig = [0,1,2,3,4];
-            Promise.series(orig.map(function(elem){
+            return Promise.series(orig.map(function(elem){
                 return function(){
                     return Promise.resolve().then(function(){
                         result.push(elem);
@@ -161,15 +153,14 @@ describe('Promise', function(){
                 };
             })).then(function(){
                 assert.deepEqual(result, orig);
-                done();
-            }).catch(done);
+            });
         });
 
         describe('should not execute after the first error', function(){
-            function test(done){
+            function test(){
                 var result = [], orig = [0,1,2,3,4];
                 var limit = 1+Math.floor(Math.random()*3);
-                Promise.series(orig.map(function(elem){
+                return Promise.series(orig.map(function(elem){
                     return function(){
                         if (elem === limit) {
                             throw new Error('BAAAAAD');
@@ -182,7 +173,6 @@ describe('Promise', function(){
                     for (var i = 0; i < limit; i++) {
                         assert.equal(result[i], i);
                     }
-                    done();
                 });
             }
             for (var i = 1; i <= 5; i++) { // do it several times since we're randomizing the error element
@@ -191,10 +181,10 @@ describe('Promise', function(){
         });
 
         describe('should not execute after the first error returning promises', function(){
-            function test(done){
+            function test(){
                 var result = [], orig = [0,1,2,3,4];
                 var limit = 1+Math.floor(Math.random()*3);
-                Promise.series(orig.map(function(elem){
+                return Promise.series(orig.map(function(elem){
                     return function(){
                         return Promise.resolve().then(function(){
                             if (elem === limit) {
@@ -209,7 +199,6 @@ describe('Promise', function(){
                     for (var i = 0; i < limit; i++) {
                         assert.equal(result[i], i);
                     }
-                    done();
                 });
             }
             for (var i = 0; i < 5; i++) { // do it several times since we're randomizing the error element
@@ -220,33 +209,31 @@ describe('Promise', function(){
     });
 
     describe('#series with iterator', function(){
-        it('should operate correctly', function(done){
+        it('should operate correctly', function(){
             var result = [], orig = [0,1,2,3,4];
-            Promise.resolve(orig).series(function(elem){
+            return Promise.resolve(orig).series(function(elem){
                 result.push(elem);
             }).then(function(){
                 assert.deepEqual(result, orig);
-                done();
-            }).catch(done);
+            });
         });
 
-        it('should operate correctly returning a promise', function(done){
+        it('should operate correctly returning a promise', function(){
             var result = [], orig = [0,1,2,3,4];
-            Promise.resolve(orig).series(function(elem){
+            return Promise.resolve(orig).series(function(elem){
                 return Promise.resolve().then(function(){
                     result.push(elem);
                 });
             }).then(function(){
                 assert.deepEqual(result, orig);
-                done();
-            }).catch(done);
+            });
         });
 
         describe('should not execute after the first error', function(){
-            function test(done){
+            function test(){
                 var result = [], orig = [0,1,2,3,4];
                 var limit = 1+Math.floor(Math.random()*3);
-                Promise.resolve(orig).series(function(elem){
+                return Promise.resolve(orig).series(function(elem){
                     if (elem === limit) {
                         throw new Error('BAAAAAD');
                     }
@@ -257,7 +244,6 @@ describe('Promise', function(){
                     for (var i = 0; i < limit; i++) {
                         assert.equal(result[i], i);
                     }
-                    done();
                 });
             }
             for (var i = 1; i <= 5; i++) { // do it several times since we're randomizing the error element
@@ -266,10 +252,10 @@ describe('Promise', function(){
         });
 
         describe('should not execute after the first error returning promises', function(){
-            function test(done){
+            function test(){
                 var result = [], orig = [0,1,2,3,4];
                 var limit = 1+Math.floor(Math.random()*3);
-                Promise.resolve(orig).series(function(elem){
+                return Promise.resolve(orig).series(function(elem){
                     return Promise.resolve().then(function(){
                         if (elem === limit) {
                             throw new Error('BAAAAAD');
@@ -282,7 +268,6 @@ describe('Promise', function(){
                     for (var i = 0; i < limit; i++) {
                         assert.equal(result[i], i);
                     }
-                    done();
                 });
             }
             for (var i = 1; i <= 5; i++) { // do it several times since we're randomizing the error element
@@ -292,9 +277,9 @@ describe('Promise', function(){
     });
 
     describe('#series without iterator', function(){
-        it('should operate correctly', function(done){
+        it('should operate correctly', function(){
             var result = [], orig = [0,1,2,3,4];
-            Promise.resolve(orig.map(function(elem){
+            return Promise.resolve(orig.map(function(elem){
                 if (elem === 0) {
                     return elem; // testing non-func case
                 }
@@ -306,13 +291,12 @@ describe('Promise', function(){
                 };
             })).series().then(function(){
                 assert.deepEqual(result, [1,2,3,4]); // no result.push() for 0
-                done();
-            }).catch(done);
+            });
         });
 
-        it('should operate correctly returning a promise', function(done){
+        it('should operate correctly returning a promise', function(){
             var result = [], orig = [0,1,2,3,4];
-            Promise.resolve(orig.map(function(elem){
+            return Promise.resolve(orig.map(function(elem){
                 return function(){
                     return Promise.resolve().then(function(){
                         result.push(elem);
@@ -320,15 +304,14 @@ describe('Promise', function(){
                 };
             })).series().then(function(){
                 assert.deepEqual(result, orig);
-                done();
-            }).catch(done);
+            });
         });
 
         describe('should not execute after the first error', function(){
-            function test(done){
+            function test(){
                 var result = [], orig = [0,1,2,3,4];
                 var limit = 1+Math.floor(Math.random()*3);
-                Promise.resolve(orig.map(function(elem){
+                return Promise.resolve(orig.map(function(elem){
                     return function(){
                         if (elem === limit) {
                             throw new Error('BAAAAAD');
@@ -341,7 +324,6 @@ describe('Promise', function(){
                     for (var i = 0; i < limit; i++) {
                         assert.equal(result[i], i);
                     }
-                    done();
                 });
             }
             for (var i = 1; i <= 5; i++) { // do it several times since we're randomizing the error element
@@ -350,10 +332,10 @@ describe('Promise', function(){
         });
 
         describe('should not execute after the first error returning promises', function(){
-            function test(done){
+            function test(){
                 var result = [], orig = [0,1,2,3,4];
                 var limit = 1+Math.floor(Math.random()*3);
-                Promise.resolve(orig.map(function(elem){
+                return Promise.resolve(orig.map(function(elem){
                     return function(){
                         return Promise.resolve().then(function(){
                             if (elem === limit) {
@@ -368,7 +350,6 @@ describe('Promise', function(){
                     for (var i = 0; i < limit; i++) {
                         assert.equal(result[i], i);
                     }
-                    done();
                 });
             }
             for (var i = 0; i < 5; i++) { // do it several times since we're randomizing the error element
@@ -449,10 +430,10 @@ describe('Promise', function(){
             };
 
         });
-        it('should promisify a callback function', function(done){
+        it('should promisify a callback function', function(){
             var safe = Promise.safelyPromisify(callbackish);
             var safeBound = Promise.safelyPromisify(callbackish, {result: 123});
-            safe(false).then(function(result){
+            return safe(false).then(function(result){
                 assert.equal(result, 'result');
                 return safe(true);
             }).catch(function(err){
@@ -463,12 +444,12 @@ describe('Promise', function(){
                 return safe.call({result: 456}, false);
             }).then(function(result){
                 assert.equal(result, 456);
-            }).done(done);
+            });
         });
-        it('should promisify a promiseish function', function(done){
+        it('should promisify a promiseish function', function(){
             var safe = Promise.safelyPromisify(promiseish);
             var safeBound = Promise.safelyPromisify(promiseish, {result: 123});
-            safe(false).then(function(result){
+            return safe(false).then(function(result){
                 assert.equal(result, 'result');
                 return safe(true);
             }).catch(function(err){
@@ -479,12 +460,12 @@ describe('Promise', function(){
                 return safe.call({result: 456}, false);
             }).then(function(result){
                 assert.equal(result, 456);
-            }).done(done);
+            });
         });
-        it('should promisify a nodeified function', function(done){
+        it('should promisify a nodeified function', function(){
             var safe = Promise.safelyPromisify(nodeified);
             var safeBound = Promise.safelyPromisify(nodeified, {result: 123});
-            safe(false).then(function(result){
+            return safe(false).then(function(result){
                 assert.equal(result, 'result');
                 return safe(true);
             }).catch(function(err){
@@ -495,7 +476,7 @@ describe('Promise', function(){
                 return safe.call({result: 456}, false);
             }).then(function(result){
                 assert.equal(result, 456);
-            }).done(done);
+            });
         });
         it('should deal with async throws if inDomain', function(done){
             var safe = Promise.safelyPromisify(asyncThrow, null, true);
@@ -570,19 +551,18 @@ describe('Promise', function(){
     });
 
     describe('.invokeAll', function(){
-        it('should execute the functions returning promises', function(done){
+        it('should execute the functions returning promises', function(){
             function p() { return Promise.resolve(1) }
-            Promise.invokeAll([p,p,p,p]).then(function(result){
+            return Promise.invokeAll([p,p,p,p]).then(function(result){
                 assert.deepEqual(result, [1,1,1,1]);
-            }).done(done);
+            });
         });
 
-        it('should reject if any of the functions do not return a promise', function(done) {
+        it('should reject if any of the functions do not return a promise', function() {
             function p() { return Promise.resolve(1) }
             function q() { return 1; }
-            Promise.invokeAll([p,p,q,p]).catch(function(e){
+            return Promise.invokeAll([p,p,q,p]).catch(function(e){
                 assert(e.message.match(/did not return a promise/));
-                done();
             });
         });
     });
