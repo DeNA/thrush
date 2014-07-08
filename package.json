@@ -23,6 +23,6 @@
     "mocha": "^1.18.2"
   },
   "dependencies": {
-    "bluebird": "^2.0.0"
+    "bluebird": "^2.2.1"
   }
 }

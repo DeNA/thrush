@@ -123,6 +123,16 @@ describe('Promise', function(){
                 it('trial '+i, test);
             }
         });
+
+        it('should operate with a delayed Promise iterator', function() {
+            return Promise.series([0,1,2,3,4], function(current, total) {
+                return Promise.delay(0).then(function() {
+                    return (total || 0) + (current + 5);
+                });
+            }).then(function(value) {
+                assert.equal(value, 0+5 + 1+5 + 2+5 + 3+5 + 4+5);
+            });
+        });
     });
 
     describe('.series without iterator', function(){
@@ -206,6 +216,24 @@ describe('Promise', function(){
             }
         });
 
+        it('should operate with delayed Promise values', function() {
+            function promising(current, delay) {
+                return function(total) {
+                    return Promise.delay(delay).then(function() {
+                        return (total || 0) + (current + 5);
+                    })
+                };
+            };
+            return Promise.series([
+                promising(0, 50),
+                promising(1, 30),
+                promising(2, 10),
+                promising(3, 30),
+                promising(4, 50),
+            ]).then(function(value) {
+                assert.equal(value, 0+5 + 1+5 + 2+5 + 3+5 + 4+5);
+            });
+        });
     });
 
     describe('#series with iterator', function(){
@@ -273,6 +301,16 @@ describe('Promise', function(){
             for (var i = 1; i <= 5; i++) { // do it several times since we're randomizing the error element
                 it('trial '+i, test);
             }
+        });
+
+        it('should operate with a delayed Promise iterator', function() {
+            return Promise.resolve([0,1,2,3,4]).series(function(current, total) {
+                return Promise.delay(0).then(function() {
+                    return (total || 0) + (current + 5);
+                });
+            }).then(function(value) {
+                assert.equal(value, 0+5 + 1+5 + 2+5 + 3+5 + 4+5);
+            });
         });
     });
 
@@ -357,6 +395,24 @@ describe('Promise', function(){
             }
         });
 
+        it('should operate with delayed Promise values', function() {
+            function promising(current, delay) {
+                return function(total) {
+                    return Promise.delay(delay).then(function() {
+                        return (total || 0) + (current + 5);
+                    })
+                };
+            };
+            return Promise.resolve([
+                promising(0, 50),
+                promising(1, 30),
+                promising(2, 10),
+                promising(3, 30),
+                promising(4, 50),
+            ]).series().then(function(value) {
+                assert.equal(value, 0+5 + 1+5 + 2+5 + 3+5 + 4+5);
+            });
+        });
     });
 
     // we're asserting this behavior since we require it, and it used to be unsupported
