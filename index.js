@@ -39,7 +39,7 @@ function defaultSeriesIterator(x, elem) {
  *
  * @memberof! Promise
  * @param {array} arr The array to iterate over.
- * @param {iterator} iterator optional iterator function. Takes in current
+ * @param {iterator} [iterator] optional iterator function. Takes in current
  * object (`elem`) and previously resolved object(`x`).
  * @return {Promise}
  */
@@ -50,7 +50,7 @@ Promise.series = Promise$series;
  * promise this is being called on.
  *
  * @memberof! Promise.prototype
- * @param {iterator} iterator optional iterator function. Takes in current
+ * @param {iterator} [iterator] optional iterator function. Takes in current
  * object (`elem`) and previously resolved object(`x`).
  * @return {Promise}
  */
@@ -106,8 +106,8 @@ Promise.whilst = function Promise$whilst(condition, action) {
  *
  * @memberof! Promise
  * @param {function} func The function to promisify
- * @param {object} thisObj An optional object to bind the function to.
- * @param {boolean} inDomain An optional boolean whether to wrap func in domain.
+ * @param {object} [thisObj] An optional object to bind the function to.
+ * @param {boolean} [inDomain] An optional boolean whether to wrap func in domain.
  * @return {function} Promisified version of func.
  */
 Promise.safelyPromisify = function Promise$safelyPromisify(func, thisObj, inDomain) {
