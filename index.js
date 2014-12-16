@@ -141,7 +141,7 @@ Promise.safelyPromisify = function Promise$safelyPromisify(func, thisObj, inDoma
  *
  * @deprecated
  * @memberof! Promise.prototype
- * @param {function} cb Callback (can be falsy)
+ * @param {function} [cb] Callback (can be falsy)
  * @return {Promise} undefined if a callback is provided
  */
 Promise.prototype.spreadNodeify = function Promise_spreadNodeify(cb) {
