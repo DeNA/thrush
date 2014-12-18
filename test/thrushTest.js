@@ -1,6 +1,6 @@
 'use strict';
 
-var Promise = require('./index');
+var Promise = require('../index');
 var assert = require('assert');
 
 describe('Promise', function(){
@@ -489,12 +489,16 @@ describe('Promise', function(){
         it('should promisify a callback function', function(){
             var safe = Promise.safelyPromisify(callbackish);
             var safeBound = Promise.safelyPromisify(callbackish, {result: 123});
+            var safeDomain = Promise.safelyPromisify(callbackish, {result: 123}, true);
             return safe(false).then(function(result){
                 assert.equal(result, 'result');
                 return safe(true);
             }).catch(function(err){
                 assert.deepEqual(err, error);
                 return safeBound(false);
+            }).then(function(result){
+                assert.equal(result, 123);
+                return safeDomain(false);
             }).then(function(result){
                 assert.equal(result, 123);
                 return safe.call({result: 456}, false);
