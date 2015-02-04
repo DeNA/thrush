@@ -486,6 +486,11 @@ describe('Promise', function(){
             };
 
         });
+        afterEach(function(){
+            if (process.domain) {
+                process.domain.exit();
+            }
+        });
         it('should promisify a callback function', function(){
             var safe = Promise.safelyPromisify(callbackish);
             var safeBound = Promise.safelyPromisify(callbackish, {result: 123});
