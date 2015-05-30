@@ -1,6 +1,8 @@
 
 # Thrush
 
+[![Build Status](https://travis-ci.org/DeNA/thrush.svg?branch=master)](https://travis-ci.org/DeNA/thrush)
+
 > ![Swainson's Thrushes](http://www.allaboutbirds.org/guide/PHOTO/LARGE/swain.jpg)
 >
 > A [**Thrush**](http://en.wikipedia.org/wiki/Thrush_%28bird%29) is any member of the *Turdidae* family, which includes robins, bluebirds, blackbirds and other small birds.
