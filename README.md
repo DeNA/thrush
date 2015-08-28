@@ -38,7 +38,7 @@ If you pass a 3rd parameter in and it is truthy, the func will be wrapped in a d
 `safelyPromisify` is actually useable as the promisifier function for `promisifyAll` so you can do something like this:
 
 ```javascript
-Promise.promisifyAll(myModule, {promisifier: Promise.safeltPromisify});
+Promise.promisifyAll(myModule, {promisifier: Promise.safelyPromisify});
 ```
 
 ----------
