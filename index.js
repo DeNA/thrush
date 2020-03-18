@@ -9,7 +9,7 @@
  * @class
  * @name Promise
  */
-var Promise = require('bluebird/js/main/promise')();
+var Promise = require('bluebird/js/release/promise')();
 
 /** @private */
 function defaultSeriesIterator(x, elem) {
